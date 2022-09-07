@@ -2,9 +2,11 @@ lockfileVersion: 5.4
 
 specifiers:
   '@11ty/eleventy': ^1.0.2
+  linkify-string: ^3.0.4
   linkifyjs: ^3.0.5
 
 dependencies:
+  linkify-string: 3.0.4_linkifyjs@3.0.5
   linkifyjs: 3.0.5
 
 devDependencies:
@@ -1176,6 +1178,14 @@ packages:
     dependencies:
       uc.micro: 1.0.6
     dev: true
+
+  /linkify-string/3.0.4_linkifyjs@3.0.5:
+    resolution: {integrity: sha512-OnNqqRjlYXaXipIAbBC8sDXsSumI1ftatzFg141Pw9HEXWjTVLFcMZoKbFupshqWRavtNJ6QHLa+u6AlxxgeRw==}
+    peerDependencies:
+      linkifyjs: ^3.0.0
+    dependencies:
+      linkifyjs: 3.0.5
+    dev: false
 
   /linkifyjs/3.0.5:
     resolution: {integrity: sha512-1Y9XQH65eQKA9p2xtk+zxvnTeQBG7rdAXSkUG97DmuI/Xhji9uaUzaWxRj6rf9YC0v8KKHkxav7tnLX82Sz5Fg==}
