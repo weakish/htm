@@ -1,20 +1,27 @@
 {
-  "name": "htm"
+  "name": "htm",
   "version": "0.0.0",
   "description": "Convert .txt to HTML2, autolinked.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["html2", "rfc1866", "txt", "autolink"],
+  "keywords": [
+    "html2",
+    "rfc1866",
+    "txt",
+    "autolink"
+  ],
   "repository": "weakish/htm",
   "bugs": {
     "url": "https://github.com/weakish/htm/issues"
   },
   "author": {
-    "name": "Jang Rush"
-  , "email": "weakish@gmail.com"
-  , "url": "https://mmap.page"
+    "name": "Jang Rush",
+    "email": "weakish@gmail.com",
+    "url": "https://mmap.page"
   },
-  "license": "0BSD"
+  "license": "0BSD",
+  "devDependencies": {
+  }
 }
