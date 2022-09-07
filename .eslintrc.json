@@ -1,0 +1,11 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "rules": {
+    "prefer-arrow-callback": "error", // avoid the evil `this`
+    "no-multi-assign": "error", // no `a = b = c = 1`
+    "no-var": "error", // use `const` and `let` instead of `var`
+    "prefer-const": "error", // use `const` when there is no reassignment
+    "no-param-reassign": "error" // use nonreassignable function parameters
+  }
+}
