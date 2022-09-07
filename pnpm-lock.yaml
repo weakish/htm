@@ -4,6 +4,7 @@ specifiers:
   '@11ty/eleventy': ^1.0.2
   linkify-string: ^3.0.4
   linkifyjs: ^3.0.5
+  prettier: ^2.7.1
 
 dependencies:
   linkify-string: 3.0.4_linkifyjs@3.0.5
@@ -11,6 +12,7 @@ dependencies:
 
 devDependencies:
   '@11ty/eleventy': 1.0.2
+  prettier: 2.7.1
 
 packages:
 
@@ -1464,6 +1466,12 @@ packages:
     dependencies:
       async: 2.6.4
       is-number-like: 1.0.8
+    dev: true
+
+  /prettier/2.7.1:
+    resolution: {integrity: sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
     dev: true
 
   /pretty/2.0.0:
