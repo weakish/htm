@@ -17,8 +17,7 @@ export function extractTitle(text: string): [string, string] {
       text.length > 50;
     if (text_is_a_very_long_line_without_newline_character) {
       const first_line: string = text.slice(0, 50);
-      const remaing_text: string = text.slice(50);
-      return [trim_start(first_line)[0], remaing_text];
+      return [trim_start(first_line)[0], text];
     } else {
       return [trim_start(text)[0], ""];
     }
@@ -35,12 +34,26 @@ export function extractTitle(text: string): [string, string] {
   } else {
     const first_line: string = text.slice(0, first_newline_character_position);
     const remaing_text: string = text.slice(first_newline_character_position);
-    return [trim_start(first_line)[0], remaing_text];
+    return [trim_start(first_line)[0], remaing_text.trimEnd()];
   }
 }
 
 export function linkIt(text: string): string {
-    const inline_link: RegExp = /\[([^\]]+)\]\(([^<)]+)\)/gm
-    const auto_linked: string = linkifyStr(text)
-    return auto_linked.replaceAll(inline_link, '<a href="$2">$1</a>')
+  const inline_link: RegExp = /\[([^\]]+)\]\(([^<)]+)\)/gm;
+  const auto_linked: string = linkifyStr(text);
+  return auto_linked.replaceAll(inline_link, '<a href="$2">$1</a>');
+}
+
+export default function htm(text: string): string {
+  const [title, body]: [string, string] = extractTitle(text);
+  const html = `<!doctype html><html lang=en>
+<head>
+  <link rel=icon href=data:,>
+  <title>${title}</title>
+</head>
+<body>
+<pre>${linkIt(body)}</pre>
+</body>
+</html>`;
+  return html;
 }
