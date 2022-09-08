@@ -168,86 +168,6 @@ DESCRIPTION
   ],
 };
 
-// const readme_with_links: Sample = {
-//   sample: `htm - convert plain text to HTML 2.0, auto-linked.
-
-// Usage
-
-//     import htm from "htm"
-//     const text = "plain text"
-//     const html = htm(text)
-
-// The returned value is a string contaning valid [HTML 2.0].
-// The first line will be the TITLE and H1 heading,
-// truncated to 50 characters.
-// The remaining part will be enclosed with a PRE element,
-// with links auto-linked.
-
-// Source
-
-// https://github.com/weakish/htm
-
-// Reference
-
-// - [Hypertext Markup Language - 2.0][HTML 2.0]
-// - [RFC1866](https://datatracker.ietf.org/doc/html/rfc1866)
-// - [HTML Validator](https://validator.w3.org)
-
-// [HTML 2.0]: https://www.w3.org/MarkUp/html-spec/html-spec_toc.html`,
-//   expected: ['htm - convert plain text to HTML 2.0, auto-linked.', `
-
-// Usage
-
-//     import htm from "htm"
-//     const text = "plain text"
-//     const html = htm(text)
-
-// The returned value is a string contaning valid [HTML 2.0].
-// The first line will be the TITLE and H1 heading,
-// truncated to 50 characters.
-// The remaining part will be enclosed with a PRE element,
-// with links auto-linked.
-
-// Source
-
-// https://github.com/weakish/htm
-
-// Reference
-
-// - [Hypertext Markup Language - 2.0][HTML 2.0]
-// - [RFC1866](https://datatracker.ietf.org/doc/html/rfc1866)
-// - [HTML Validator](https://validator.w3.org)
-
-// [HTML 2.0]: https://www.w3.org/MarkUp/html-spec/html-spec_toc.html`]
-// }
-// tap.equal(linkIt(readme_with_links.sample), `htm - convert plain text to HTML 2.0, auto-linked.
-
-// Usage
-
-//     import htm from "htm"
-//     const text = "plain text"
-//     const html = htm(text)
-
-// The returned value is a string contaning valid [HTML 2.0].
-// The first line will be the TITLE and H1 heading,
-// truncated to 50 characters.
-// The remaining part will be enclosed with a PRE element,
-// with links auto-linked.
-
-// Source
-
-// <a href="https://github.com/weakish/htm">https://github.com/weakish/htm</a>
-
-// Reference
-
-// - [Hypertext Markup Language - 2.0][HTML 2.0]
-// - <a href="https://datatracker.ietf.org/doc/html/rfc1866">RFC1866</a>
-// - [HTML Validator](https://validator.w3.org)
-
-// [HTML 2.0]: https://www.w3.org/MarkUp/html-spec/html-spec_toc.html`,
-
-// `)
-
 type LinkSample = {
   sample: string;
   expected: string;
@@ -269,8 +189,42 @@ const inline_link: LinkSample = {
   sample: "[weblog](https://example.com/log)",
   expected: '<a href="https://example.com/log">weblog</a>',
 };
+const readme_with_links: LinkSample = {
+  sample: `The returned value is a string contaning valid [HTML 2.0].
 
-const links: LinkSample[] = [url, reference, inline_relative_link, inline_link];
+Source
+
+https://github.com/weakish/htm
+
+Reference
+
+- [Hypertext Markup Language - 2.0][HTML 2.0]
+- [RFC1866](/rfc1866)
+- [HTML Validator](https://validator.w3.org)
+
+[HTML 2.0]: https://www.w3.org/MarkUp/html-spec/html-spec_toc.html`,
+  expected: `The returned value is a string contaning valid [HTML 2.0].
+
+Source
+
+<a href="https://github.com/weakish/htm">https://github.com/weakish/htm</a>
+
+Reference
+
+- [Hypertext Markup Language - 2.0][HTML 2.0]
+- <a href="/rfc1866">RFC1866</a>
+- <a href="https://validator.w3.org">HTML Validator</a>
+
+[HTML 2.0]: <a href="https://www.w3.org/MarkUp/html-spec/html-spec_toc.html">https://www.w3.org/MarkUp/html-spec/html-spec_toc.html</a>`,
+};
+
+const links: LinkSample[] = [
+  url,
+  reference,
+  inline_relative_link,
+  inline_link,
+  readme_with_links,
+];
 links.forEach((link) => {
   tap.equal(linkIt(link.sample), link.expected);
 });
