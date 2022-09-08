@@ -1,5 +1,6 @@
 import tap from "tap";
 import { extractTitle } from "./index.js";
+import htm from "./index.js";
 
 const sample_license: string = `Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted.
@@ -170,4 +171,18 @@ DESCRIPTION
 const samples: Sample[] = [readme, man];
 samples.forEach((s) => {
   tap.strictSame(extractTitle(s.sample), s.expected);
+
+  const [title, body]: [string, string] = s.expected;
+  tap.strictSame(
+    htm(s.sample),
+    `<!doctype html><html lang=en>
+<head>
+  <link rel=icon href=data:,>
+  <title>${title}</title>
+</head>
+<body>
+<pre>${body}</pre>
+</body>
+</html>`
+  );
 });
