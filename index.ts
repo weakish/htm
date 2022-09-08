@@ -39,9 +39,12 @@ export function extractTitle(text: string): [string, string] {
 }
 
 export function linkIt(text: string): string {
-  const inline_link: RegExp = /\[([^\]]+)\]\(([^<)]+)\)/gm;
   const auto_linked: string = linkifyStr(text);
-  return auto_linked.replaceAll(inline_link, '<a href="$2">$1</a>');
+  const inline_relative_link: RegExp = /\[([^\]]+)\]\(([^<)]+)\)/gm;
+  const inline_link: RegExp = /\[([^\]]+)\]\(<a href="([^"]+)">[^<]+<\/a>\)/gm;
+  return auto_linked
+    .replaceAll(inline_relative_link, '<a href="$2">$1</a>')
+    .replaceAll(inline_link, '<a href="$2">$1</a>');
 }
 
 export default function htm(text: string): string {

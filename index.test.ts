@@ -265,8 +265,12 @@ const inline_relative_link: LinkSample = {
   sample: "[weblog](/log)",
   expected: '<a href="/log">weblog</a>',
 };
+const inline_link: LinkSample = {
+  sample: "[weblog](https://example.com/log)",
+  expected: '<a href="https://example.com/log">weblog</a>',
+};
 
-const links: LinkSample[] = [url, reference, inline_relative_link];
+const links: LinkSample[] = [url, reference, inline_relative_link, inline_link];
 links.forEach((link) => {
   tap.equal(linkIt(link.sample), link.expected);
 });
