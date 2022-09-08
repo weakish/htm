@@ -52,6 +52,7 @@ export default function htm(text: string): string {
   <title>${title}</title>
 </head>
 <body>
+<h1>${title}</h1>
 <pre>${linkIt(body)}</pre>
 </body>
 </html>`;

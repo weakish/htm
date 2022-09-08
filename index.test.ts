@@ -181,6 +181,7 @@ samples.forEach((s) => {
   <title>${title}</title>
 </head>
 <body>
+<h1>${title}</h1>
 <pre>${body}</pre>
 </body>
 </html>`
