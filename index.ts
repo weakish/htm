@@ -46,9 +46,9 @@ export function linkIt(text: string): string {
 
 export default function htm(text: string): string {
   const [title, body]: [string, string] = extractTitle(text);
-  const html = `<!doctype html><html lang=en>
+  const html = `<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 Strict Level 1//EN"><html>
 <head>
-  <link rel=icon href=data:,>
+  <link rel=icon href="data:,">
   <title>${title}</title>
 </head>
 <body>

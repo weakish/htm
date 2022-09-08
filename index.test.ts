@@ -175,9 +175,9 @@ samples.forEach((s) => {
   const [title, body]: [string, string] = s.expected;
   tap.strictSame(
     htm(s.sample),
-    `<!doctype html><html lang=en>
+    `<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 Strict Level 1//EN"><html>
 <head>
-  <link rel=icon href=data:,>
+  <link rel=icon href="data:,">
   <title>${title}</title>
 </head>
 <body>
