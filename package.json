@@ -5,8 +5,15 @@
   "description": "Convert .txt to HTML2, autolinked.",
   "main": "index.ts",
   "scripts": {
-    "test": "ts-node --esm index.test.ts",
+    "test": "NODE_NO_WARNINGS=1 c8 tap",
     "prepare": "husky install"
+  },
+  "tap": {
+    "node-arg": [
+      "--loader=ts-node/esm"
+    ],
+    "coverage": false,
+    "ts": false
   },
   "keywords": [
     "html2",
@@ -36,6 +43,7 @@
     "@types/tape": "^4.13.2",
     "@typescript-eslint/eslint-plugin": "^5.36.2",
     "@typescript-eslint/parser": "^5.36.2",
+    "c8": "^7.12.0",
     "eslint": "^8.23.0",
     "husky": "^8.0.0",
     "prettier": "^2.7.1",
