@@ -1,10 +1,11 @@
 {
+  "type": "module",
   "name": "htm",
   "version": "0.0.0",
   "description": "Convert .txt to HTML2, autolinked.",
   "main": "index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "ava",
     "prepare": "husky install"
   },
   "keywords": [
@@ -32,6 +33,7 @@
     "@tsconfig/node16-strictest-esm": "^1.0.3",
     "@typescript-eslint/eslint-plugin": "^5.36.2",
     "@typescript-eslint/parser": "^5.36.2",
+    "ava": "^4.3.3",
     "eslint": "^8.23.0",
     "husky": "^8.0.0",
     "prettier": "^2.7.1",
