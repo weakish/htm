@@ -1,12 +1,4 @@
 {
-  "compilerOptions": {
-    "strict": true,
-    "noUncheckedIndexAccess": true,
-    "noUnusedParameters": true,
-    "noUnusedLocals": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitOverride": true
-  },
+  "extends": "@tsconfig/node16-strictest-esm/tsconfig.json",
   "files": ["index.ts"]
 }
