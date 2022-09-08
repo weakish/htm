@@ -1,4 +1,7 @@
 {
   "extends": "@tsconfig/node16-strictest-esm/tsconfig.json",
+  "compilerOptions": {
+    "declaration": true
+  },
   "files": ["index.ts"]
 }

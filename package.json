@@ -3,7 +3,6 @@
   "name": "htm",
   "version": "0.0.0",
   "description": "Convert plain text to HTML2, autolinked.",
-  "main": "index.ts",
   "scripts": {
     "test": "NODE_NO_WARNINGS=1 c8 tap",
     "prepare": "husky install"
