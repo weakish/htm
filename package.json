@@ -5,6 +5,7 @@
   "description": "Convert plain text to HTML2, autolinked.",
   "scripts": {
     "test": "NODE_NO_WARNINGS=1 c8 tap",
+    "lint": "eslint index.ts",
     "prepare": "husky install"
   },
   "tap": {
