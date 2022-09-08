@@ -36,7 +36,6 @@
     "linkifyjs": "^3.0.5"
   },
   "devDependencies": {
-    "@11ty/eleventy": "^1.0.2",
     "@tsconfig/node16-strictest-esm": "^1.0.3",
     "@types/node": "^18.7.16",
     "@types/tap": "^15.0.7",
