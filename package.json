@@ -5,7 +5,7 @@
   "description": "Convert .txt to HTML2, autolinked.",
   "main": "index.ts",
   "scripts": {
-    "test": "ava",
+    "test": "node test.js",
     "prepare": "husky install"
   },
   "keywords": [
