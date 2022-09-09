@@ -34,13 +34,13 @@ function htm(text) {
   var match = extractTitle(text);
   var title = match[0];
   return (
-    '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 Strict Level 1//EN"><html>\n<head>\n  <link rel=icon href="data:,">\n  <title>' +
+    '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 Strict Level 1//EN">\n<html>\n<head>\n  <link rel=icon href="data:,">\n  <title>' +
     title +
-    "</title>\n</head>\n<body>\n<h1>" +
+    "</title>\n</head>\n<body>\n  <h1>" +
     title +
-    "</h1>\n<pre>" +
+    "</h1>\n  <pre>" +
     linkIt(match[1]) +
-    "</pre>\n</body>\n</html>"
+    "</pre>\n</body>\n</html>\n"
   );
 }
 

@@ -35,14 +35,16 @@ let linkIt = (text: string): string => {
 @genType
 let htm = (text: string): string => {
     let (title, body) = extractTitle(text);
-    `<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 Strict Level 1//EN"><html>
+    `<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 Strict Level 1//EN">
+<html>
 <head>
   <link rel=icon href="data:,">
   <title>${title}</title>
 </head>
 <body>
-<h1>${title}</h1>
-<pre>${linkIt(body)}</pre>
+  <h1>${title}</h1>
+  <pre>${linkIt(body)}</pre>
 </body>
-</html>`
+</html>
+`
 }
