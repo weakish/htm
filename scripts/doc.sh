@@ -1,7 +1,7 @@
 #!/bin/sh
 if [ -n "$RENDER" ]; then
   curl https://bun.sh/install | bash
-  bun ./scripts/doc.ts
+  $HOME/.bun/bin/bun ./scripts/doc.ts
 elif [ "$(uname)" = "Linux" -a "$(uname -m)" = "x86_64" ]; then
   ./scripts/bun-linux-amd64 ./scripts/doc.ts
 else
