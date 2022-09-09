@@ -1,5 +1,14 @@
 import tap from "tap";
-import { extractTitle, linkIt, htm } from "../src/index.bs.js";
+import { trimStart, extractTitle, linkIt, htm } from "../src/index.bs.js";
+
+tap.equal(trimStart("  hello"), "hello");
+tap.equal(trimStart("hello world "), "hello world");
+tap.equal(trimStart("hello"), "hello");
+tap.equal(trimStart("# hello"), "hello");
+tap.equal(trimStart("# hello #"), "hello #");
+tap.equal(trimStart("#hello"), "#hello");
+tap.equal(trimStart("## hello"), "## hello");
+tap.equal(trimStart(" # hello"), "hello");
 
 const sample_license: string = `Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted.
