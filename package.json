@@ -3,10 +3,11 @@
   "name": "htm",
   "version": "0.0.0",
   "description": "Convert plain text to HTML2, autolinked.",
+  "main": "src/index.bs.js",
   "scripts": {
     "test": "NODE_NO_WARNINGS=1 c8 tap",
-    "lint": "eslint index.ts",
-    "build": "rescript",
+    "lint": "eslint test/main.ts",
+    "build": "rescript && tsc && cp src/index.gen.d.ts src/index.bs.d.ts",
     "prepare": "husky install"
   },
   "tap": {

@@ -3,5 +3,5 @@
   "compilerOptions": {
     "declaration": true
   },
-  "files": ["index.ts"]
+  "files": ["src/index.gen.ts"]
 }

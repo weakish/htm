@@ -8,8 +8,8 @@
   "suffix": ".bs.js",
   "gentypeconfig": {
     "language": "typescript",
+    "generatedFileExtension": ".gen.ts",
     "shims": {},
-    "generatedFileExtension": ".ts",
     "module": "es6",
     "debug": {
       "all": false,
