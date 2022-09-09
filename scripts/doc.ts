@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from "fs";
-import { htm } from "../src/index.bs";
+import { htm } from "../src/index.bs.js";
 
 const text: string = readFileSync("README.txt", "utf8");
 const html: string = htm(text);
