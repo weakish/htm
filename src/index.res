@@ -1,4 +1,4 @@
-@module external linkifyStr: (string) => string = "linkify-string";
+@module("linkify-string") external linkifyStr: (string) => string = "default";
 
 let trimStart = (line: string) => {
     let trimmed = line->Js.String2.trim;
@@ -15,7 +15,7 @@ let extractTitle = (text: string): (string, string) => {
         (trimStart(text), "")
     } else {
         let title = text->Js.String2.slice(~from=0, ~to_=first_newline)->trimStart
-        let body = text->Js.String2.sliceToEnd(~from=first_newline)
+        let body = text->Js.String2.sliceToEnd(~from=first_newline+1)
         (title, body)
     }
 }

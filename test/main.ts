@@ -1,6 +1,5 @@
 import tap from "tap";
-import { extractTitle, linkIt } from "../index.js";
-import htm from "../index.js";
+import { extractTitle, linkIt, htm } from "../src/index.bs.js";
 
 const sample_license: string = `Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted.
@@ -13,9 +12,19 @@ LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
 OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.`;
 const expected_license_title: string =
-  "Permission to use, copy, modify, and/or distribute";
+  "Permission to use, copy, modify, and/or distribute this software for any";
+const expected_license_body: string = `purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.`;
+
 tap.equal(extractTitle(sample_license)[0], expected_license_title);
-tap.equal(extractTitle(sample_license)[1], sample_license);
+tap.equal(extractTitle(sample_license)[1], expected_license_body);
 
 const sample_program: string = `import linkifyStr from "linkify-string";
 
@@ -31,7 +40,6 @@ function trim_start(line: string): [string, boolean] {
 const expected_program_title: string =
   'import linkifyStr from "linkify-string";';
 const expected_program_body: string = `
-
 function trim_start(line: string): [string, boolean] {
   const trimmed: string = line.trimStart();
   if (trimmed.startsWith("# ")) {
@@ -43,30 +51,22 @@ function trim_start(line: string): [string, boolean] {
 `;
 tap.strictSame(extractTitle(sample_program), [
   expected_program_title,
-  expected_program_body.trimEnd(),
+  expected_program_body,
 ]);
 
 const sample_a_very_long_line_without_newline_character: string =
   "const text_is_a_very_long_line_without_newline_character: boolean = text.length > 50;";
-const expected_long_line_title: string =
-  "const text_is_a_very_long_line_without_newline_cha";
 tap.strictSame(
   extractTitle(sample_a_very_long_line_without_newline_character),
-  [expected_long_line_title, sample_a_very_long_line_without_newline_character]
+  [sample_a_very_long_line_without_newline_character, ""]
 );
 tap.strictSame(
   extractTitle("#" + sample_a_very_long_line_without_newline_character),
-  [
-    "#" + expected_long_line_title.slice(0, 50 - 1),
-    "#" + sample_a_very_long_line_without_newline_character,
-  ]
+  ["#" + sample_a_very_long_line_without_newline_character, ""]
 );
 tap.strictSame(
   extractTitle("# " + sample_a_very_long_line_without_newline_character),
-  [
-    expected_long_line_title.slice(0, 50 - "# ".length),
-    "# " + sample_a_very_long_line_without_newline_character,
-  ]
+  [sample_a_very_long_line_without_newline_character, ""]
 );
 
 type Sample = {
@@ -102,8 +102,7 @@ const html_code: Sample = {
 </html>`,
   expected: [
     "<!doctype html><html lang=en>",
-    `
-<head>
+    `<head>
   <link rel=icon href=data:,>
   <title>\${title}</title>
 </head>
@@ -124,7 +123,6 @@ const readme: Sample = {
   expected: [
     "htm",
     `
-
 ## License
 
 0BSD, excluding dependencies which have various licenses.`,
@@ -132,6 +130,7 @@ const readme: Sample = {
 };
 const man: Sample = {
   sample: `man - an interface to the system reference manuals
+
 SYNOPSIS
        man [man options] [[section] page ...] ...
        man -k [apropos options] regexp ...
