@@ -1,6 +1,6 @@
 import tap from "tap";
-import { extractTitle, linkIt } from "./index.js";
-import htm from "./index.js";
+import { extractTitle, linkIt } from "../index.js";
+import htm from "../index.js";
 
 const sample_license: string = `Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted.
