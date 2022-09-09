@@ -7,8 +7,7 @@ Usage
     const html = htm(text)
 
 The returned value is a string contaning valid [HTML 2.0].
-The first line will be the TITLE and H1 heading,
-truncated to 50 characters.
+The first line will be the TITLE and H1 heading.
 The remaining part will be enclosed with a PRE element,
 with links auto-linked.
 
@@ -19,7 +18,7 @@ However, the following Markdown syntax is supported:
 
 - If the first line starts with `# `, then the leading `# ` will be trimmed.
 
-- Inline links (brackets immediately followed with parens) will be convert to links,
+- Inline links (brackets immediately followed with parentheses) will be converted to links,
   without displaying the URL.
 
 Source
@@ -28,7 +27,7 @@ https://github.com/weakish/htm
 
 License
 
-0BSD, excluding dependencies which have various licenses.
+0BSD, excluding dependencies that have various licenses.
 
 Reference
 
