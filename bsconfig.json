@@ -1,0 +1,8 @@
+{
+  "name": "htm",
+  "sources": ["src"],
+  "package-specs": {
+    "module": "es6-global",
+    "in-source": true
+  }
+}
