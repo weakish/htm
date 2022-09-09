@@ -10,7 +10,7 @@
     "lint": "eslint test/main.ts",
     "build": "rescript && tsc && cp src/index.gen.d.ts src/index.bs.d.ts",
     "prepare": "husky install",
-    "doc": "sh scripts/doc.sh"
+    "doc": "ts-node-esm scripts/doc.ts"
   },
   "tap": {
     "node-arg": [
