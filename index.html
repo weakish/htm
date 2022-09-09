@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//IETF//DTD HTML 2.0 Strict Level 1//EN">
+<html>
+  <head>
+    <link rel="icon" href="data:," />
+    <title>htm - convert plain text to HTML 2.0, auto-linked.</title>
+  </head>
+  <body>
+    <h1>htm - convert plain text to HTML 2.0, auto-linked.</h1>
+    <pre>
+Usage
+
+    import htm from "htm"
+    const text = "plain text"
+    const html = htm(text)
+
+The returned value is a string contaning valid [HTML 2.0].
+The first line will be the TITLE and H1 heading.
+The remaining part will be enclosed with a PRE element,
+with links auto-linked.
+
+Markdown Compatibility
+
+The input is supposed to be plain text.
+However, the following Markdown syntax is supported:
+
+- If the first line starts with `# `, then the leading `# ` will be trimmed.
+
+- Inline links (brackets immediately followed with parentheses) will be converted to links,
+  without displaying the URL.
+
+Source
+
+<a href="https://github.com/weakish/htm">https://github.com/weakish/htm</a>
+
+License
+
+0BSD, excluding dependencies that have various licenses.
+
+Reference
+
+- [Hypertext Markup Language - 2.0][HTML 2.0]
+- <a href="https://datatracker.ietf.org/doc/html/rfc1866">RFC1866</a>
+- <a href="https://validator.w3.org">HTML Validator</a>
+
+[HTML 2.0]: <a href="https://www.w3.org/MarkUp/html-spec/html-spec_toc.html">https://www.w3.org/MarkUp/html-spec/html-spec_toc.html</a>
+</pre>
+  </body>
+</html>
