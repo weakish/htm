@@ -4,5 +4,16 @@
   "package-specs": {
     "module": "es6-global",
     "in-source": true
+  },
+  "suffix": ".bs.js",
+  "gentypeconfig": {
+    "language": "typescript",
+    "shims": {},
+    "generatedFileExtension": ".ts",
+    "module": "es6",
+    "debug": {
+      "all": false,
+      "basic": false
+    }
   }
 }

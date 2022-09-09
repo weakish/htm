@@ -29,6 +29,7 @@ let linkIt = (text: string) => {
     text->linkifyStr->Js.String2.replaceByRe(local, replacement)->Js.String2.replaceByRe(inline, replacement)
 }
 
+@genType
 let htm = (text) => {
     let (title, body) = extractTitle(text);
     `<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 Strict Level 1//EN"><html>
