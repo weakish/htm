@@ -22,11 +22,14 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "16.x"
-      - name: Upload coverage data to Code Climate
-        uses: paambaati/codeclimate-action@v3.0.0
-        env:
-          CC_TEST_REPORTER_ID: 4f9997816b8a6742125c5740b53d48db745b558b4fc0604ad6f9ceb1ed587f07
+      - run: pnpm test
+  codacy-coverage-reporter:
+    runs-on: ubuntu-latest
+    name: codacy-coverage-reporter
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run codacy-coverage-reporter
+        uses: codacy/codacy-coverage-reporter-action@v1
         with:
-          coverageCommand: pnpm test
-          coverageLocations: |
-            ${{github.workspace}}/coverage/tmp/*.json:lcov
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: coverage/tests.lcov
