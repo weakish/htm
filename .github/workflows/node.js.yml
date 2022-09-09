@@ -29,4 +29,4 @@ jobs:
         with:
           coverageCommand: pnpm test
           coverageLocations: |
-            ${{github.workspace}}/coverage/*.json:lcov
+            ${{github.workspace}}/coverage/tmp/*.json:lcov
