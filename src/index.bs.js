@@ -2,7 +2,7 @@
 
 import LinkifyString from "linkify-string";
 
-function trimStart(line) {
+function h1(line) {
   var trimmed = line.trim();
   if (trimmed.startsWith("# ")) {
     return trimmed.slice(2);
@@ -14,35 +14,61 @@ function trimStart(line) {
 function extractTitle(text) {
   var first_newline = text.indexOf("\n");
   if (first_newline === -1) {
-    return [trimStart(text), ""];
+    return [
+            h1(text),
+            ""
+          ];
   }
-  var title = trimStart(text.slice(0, first_newline));
-  var body = text.slice((first_newline + 1) | 0);
-  return [title, body];
+  var title = h1(text.slice(0, first_newline));
+  var body = text.slice(first_newline + 1 | 0);
+  return [
+          title,
+          body
+        ];
 }
 
 function linkIt(text) {
   var local = /\[([^\]]+)\]\(([^<)]+)\)/gm;
   var inline = /\[([^\]]+)\]\(<a href=\"([^\"]+)\">[^<]+<\/a>\)/gm;
-  var replacement = '<a href="$2">$1</a>';
-  return LinkifyString(text)
-    .replace(local, replacement)
-    .replace(inline, replacement);
+  var replacement = "<a href=\"$2\">$1</a>";
+  return LinkifyString(text).replace(local, replacement).replace(inline, replacement);
+}
+
+function doctype(variant) {
+  if (variant === "iso") {
+    return "<!DOCTYPE HTML PUBLIC \"ISO/IEC 15445:2000//DTD HTML//EN\">";
+  } else if (variant === "html2") {
+    return "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0 Strict Level 1//EN\">";
+  } else if (variant === "html5") {
+    return "<!DOCTYPE html>";
+  } else {
+    return ;
+  }
+}
+
+function html(text, variant) {
+  var match = extractTitle(text);
+  var body = match[1];
+  var title = match[0];
+  var tags = "<TITLE>" + title + "</TITLE><H1>" + title + "</H1>\n<PLAINTEXT>\n" + body + "";
+  var dtd = doctype(variant);
+  if (dtd !== undefined) {
+    return "" + dtd + "\n<html>\n<head>\n  <link rel=icon href=\"data:,\">\n  <title>" + title + "</title>\n</head>\n<body>\n  <h1>" + title + "</h1>\n  <pre>" + linkIt(body) + "</pre>\n</body>\n</html>";
+  } else {
+    return tags;
+  }
 }
 
 function htm(text) {
-  var match = extractTitle(text);
-  var title = match[0];
-  return (
-    '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 Strict Level 1//EN">\n<html>\n<head>\n  <link rel=icon href="data:,">\n  <title>' +
-    title +
-    "</title>\n</head>\n<body>\n  <h1>" +
-    title +
-    "</h1>\n  <pre>" +
-    linkIt(match[1]) +
-    "</pre>\n</body>\n</html>\n"
-  );
+  return html(text, "html2");
 }
 
-export { trimStart, extractTitle, linkIt, htm };
+export {
+  h1 ,
+  extractTitle ,
+  linkIt ,
+  doctype ,
+  html ,
+  htm ,
+}
 /* linkify-string Not a pure module */

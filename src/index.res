@@ -1,10 +1,11 @@
 @module("linkify-string") external linkifyStr: (string) => string = "default";
 
 @genType
-let trimStart = (line: string): string => {
-    let trimmed = line->Js.String2.trim;
-    if trimmed->Js.String2.startsWith("# ") {
-        trimmed->Js.String2.sliceToEnd(~from=2);
+let h1 = (line: string): string => {
+    open Js.String2
+    let trimmed = trim(line)
+    if trimmed->startsWith("# ") {
+        trimmed->sliceToEnd(~from=2);
     } else {
         trimmed
     }
@@ -12,12 +13,13 @@ let trimStart = (line: string): string => {
 
 @genType
 let extractTitle = (text: string): (string, string) => {
-    let first_newline = text->Js.String2.indexOf("\n")
+    open Js.String2
+    let first_newline = text->indexOf("\n")
     if first_newline == -1 {
-        (trimStart(text), "")
+        (h1(text), "")
     } else {
-        let title = text->Js.String2.slice(~from=0, ~to_=first_newline)->trimStart
-        let body = text->Js.String2.sliceToEnd(~from=first_newline+1)
+        let title = text->slice(~from=0, ~to_=first_newline)->h1
+        let body = text->sliceToEnd(~from=first_newline+1)
         (title, body)
     }
 }
@@ -29,13 +31,29 @@ let linkIt = (text: string): string => {
     // [description](url), where url is auto-linked by linkifyStr
     let inline = %re("/\[([^\]]+)\]\(<a href=\"([^\"]+)\">[^<]+<\/a>\)/gm")
     let replacement = "<a href=\"$2\">$1</a>"
-    text->linkifyStr->Js.String2.replaceByRe(local, replacement)->Js.String2.replaceByRe(inline, replacement)
+    let replace = Js.String2.replaceByRe
+    text->linkifyStr->replace(local, replacement)->replace(inline, replacement)
 }
 
+
+type htmlVariant = [#tags | #html2 | #iso | #html5 ]
+let doctype = (variant: htmlVariant): option<string> => switch variant {
+    | #tags => None
+    | #html2 => Some("<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0 Strict Level 1//EN\">")
+    | #iso => Some("<!DOCTYPE HTML PUBLIC \"ISO/IEC 15445:2000//DTD HTML//EN\">")
+    | #html5 => Some("<!DOCTYPE html>")
+}
+
+
 @genType
-let htm = (text: string): string => {
+let html = (text: string, variant: htmlVariant): string => {
     let (title, body) = extractTitle(text);
-    `<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 Strict Level 1//EN">
+    let tags = `<TITLE>${title}</TITLE><H1>${title}</H1>
+<PLAINTEXT>
+${body}`
+    switch doctype(variant) {
+        | None => tags
+        | Some(dtd) => `${dtd}
 <html>
 <head>
   <link rel=icon href="data:,">
@@ -45,6 +63,11 @@ let htm = (text: string): string => {
   <h1>${title}</h1>
   <pre>${linkIt(body)}</pre>
 </body>
-</html>
-`
+</html>`
+    }
+}
+
+@genType
+let htm = (text: string): string => {
+    html(text, #html2)
 }
