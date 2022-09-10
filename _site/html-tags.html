@@ -1,12 +1,6 @@
-<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 Strict Level 1//EN">
-<html>
-<head>
-  <link rel=icon href="data:,">
-  <title>htm - convert plain text to HTML 2.0, auto-linked.</title>
-</head>
-<body>
-  <h1>htm - convert plain text to HTML 2.0, auto-linked.</h1>
-  <pre>
+<TITLE>htm - convert plain text to HTML 2.0, auto-linked.</TITLE><H1>htm - convert plain text to HTML 2.0, auto-linked.</H1>
+<PLAINTEXT>
+
 
 Usage
 
@@ -23,7 +17,7 @@ Besides HTML 2.0, ISO HTML and HTML5 are also supported.
 Below is the type definition in TypeScript:
 
     type htmlVariant = "tags" | "html2" | "iso" | "html5";
-    const html: (text: string, variant: htmlVariant) =&gt; string;
+    const html: (text: string, variant: htmlVariant) => string;
 
 In fact, `htm(text)` is just a shortcut for `html(text, "html2")`.
 
@@ -54,13 +48,13 @@ Contributing
 
 The source code repository is at
 
-<a href="https://github.com/weakish/htm">https://github.com/weakish/htm</a>
+https://github.com/weakish/htm
 
 This project is written in ReScript (src/index.res),
 with tests written in TypeScript.
 
   "dependencies": {
-    "linkify-string": "auto link URLs and escape &lt;,&gt;,&amp;"
+    "linkify-string": "auto link URLs and escape <,>,&"
   },
   "devDependencies": {
     "c8": "coverage",
@@ -79,12 +73,10 @@ License
 
 Reference
 
-- <a href="http://info.cern.ch/hypertext/WWW/MarkUp/Tags.html">HTML Tags</a>
+- [HTML Tags](http://info.cern.ch/hypertext/WWW/MarkUp/Tags.html)
 - [Hypertext Markup Language - 2.0][HTML 2.0]
-- <a href="https://datatracker.ietf.org/doc/html/rfc1866">RFC1866</a>
-- <a href="https://www.scss.tcd.ie/misc/15445/15445.HTML">ISO/IEC 15445:2000</a>
-- <a href="https://validator.w3.org">HTML Validator</a>
+- [RFC1866](https://datatracker.ietf.org/doc/html/rfc1866)
+- [ISO/IEC 15445:2000](https://www.scss.tcd.ie/misc/15445/15445.HTML)
+- [HTML Validator](https://validator.w3.org)
 
-[HTML 2.0]: <a href="https://www.w3.org/MarkUp/html-spec/html-spec_toc.html">https://www.w3.org/MarkUp/html-spec/html-spec_toc.html</a></pre>
-</body>
-</html>
+[HTML 2.0]: https://www.w3.org/MarkUp/html-spec/html-spec_toc.html
