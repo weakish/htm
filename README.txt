@@ -1,5 +1,6 @@
 htm - convert plain text to HTML 2.0, auto-linked.
 
+
 Usage
 
     import htm from "htm"
@@ -11,6 +12,26 @@ The first line will be the TITLE and H1 heading.
 The remaining part will be enclosed with a PRE element,
 with links auto-linked.
 
+Besides HTML 2.0, ISO HTML and HTML5 are also supported.
+Below is the type definition in TypeScript:
+
+    type htmlVariant = "tags" | "html2" | "iso" | "html5";
+    const html: (text: string, variant: htmlVariant) => string;
+
+In fact, `htm(text)` is just a shortcut for `html(text, "html2")`.
+
+HTML 2.0 is the first standard of HTML, published in 1995.
+ISO HTML, published as an ISO standard in 2000,
+is almost identical to HTML 4.01 Strict.
+HTML 4.01, published in 1999,
+is the most widely adopted standard in the first decade of the 21st century.
+HTML5 is the current recommendation by all mainstream web browsers.  
+
+It also supports generating HTML tags, the HTML language before 2.0,
+which was published in 1991 and is the first publicly available description of HTML.
+Auto-link is not supported when specifying this as the output format.
+
+
 Markdown Compatibility
 
 The input is supposed to be plain text.
@@ -21,9 +42,29 @@ However, the following Markdown syntax is supported:
 - Inline links (brackets immediately followed with parentheses) will be converted to links,
   without displaying the URL.
 
-Source
+
+Contributing
+
+The source code repository is at
 
 https://github.com/weakish/htm
+
+This project is written in ReScript (src/index.res),
+with tests written in TypeScript.
+
+  "dependencies": {
+    "linkify-string": "auto link URLs and escape <,>,&"
+  },
+  "devDependencies": {
+    "c8": "coverage",
+    "gentype": "generate TypeScript type definitions from ReScript",
+    "husky": "manage git pre commits",
+    "prettier": "code format",
+    "pretty-quick": "code format pre-commit",
+    "reanalyze": "analyze ReScript code for common problems",
+    "tap": "test"
+  }
+
 
 License
 
@@ -31,8 +72,10 @@ License
 
 Reference
 
+- [HTML Tags](http://info.cern.ch/hypertext/WWW/MarkUp/Tags.html)
 - [Hypertext Markup Language - 2.0][HTML 2.0]
 - [RFC1866](https://datatracker.ietf.org/doc/html/rfc1866)
+- [ISO/IEC 15445:2000](https://www.scss.tcd.ie/misc/15445/15445.HTML)
 - [HTML Validator](https://validator.w3.org)
 
 [HTML 2.0]: https://www.w3.org/MarkUp/html-spec/html-spec_toc.html
