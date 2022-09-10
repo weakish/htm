@@ -6,7 +6,7 @@
   "main": "src/index.bs.js",
   "scripts": {
     "pretest": "rescript",
-    "test": "NODE_NO_WARNINGS=1 c8 tap",
+    "test": "NODE_NO_WARNINGS=1 c8 --report=lconv tap && c8 report --reporter=text-lcov > coverage/tests.lcov",
     "lint": "reanalyze -dce && eslint test/main.ts",
     "build": "rescript && tsc && cp src/index.gen.d.ts src/index.bs.d.ts",
     "prepare": "husky install",
