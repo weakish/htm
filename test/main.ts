@@ -1,5 +1,5 @@
 import tap from "tap";
-import { h1, extractTitle, linkIt, htm } from "../src/index.bs.js";
+import { h1, extractTitle, linkIt, htm, html } from "../src/index.bs.js";
 
 tap.equal(h1("  hello"), "hello");
 tap.equal(h1("hello world "), "hello world");
@@ -242,7 +242,7 @@ samples.forEach((s) => {
   tap.strictSame(extractTitle(s.sample), s.expected);
 
   const [title, body]: [string, string] = s.expected;
-  tap.strictSame(
+  tap.equal(
     htm(s.sample),
     `<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 Strict Level 1//EN">
 <html>
@@ -256,4 +256,96 @@ samples.forEach((s) => {
 </body>
 </html>`
   );
+  tap.equal(htm(s.sample), html(s.sample, "html2"));
+  const html_element = (html: string): string => html.slice(html.indexOf("\n"));
+  const html2Dtd =
+    '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 Strict Level 1//EN">';
+  const isoDtd = '<!DOCTYPE HTML PUBLIC "ISO/IEC 15445:2000//DTD HTML//EN">';
+  const html5Dtd = "<!DOCTYPE html>";
+  tap.equal(html(s.sample, "html2"), html2Dtd + html_element(htm(s.sample)));
+  tap.equal(html(s.sample, "iso"), isoDtd + html_element(htm(s.sample)));
+  tap.equal(html(s.sample, "html5"), html5Dtd + html_element(htm(s.sample)));
 });
+
+tap.equal(
+  htm("hello\nworld"),
+  `<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 Strict Level 1//EN">
+<html>
+<head>
+  <link rel=icon href="data:,">
+  <title>hello</title>
+</head>
+<body>
+  <h1>hello</h1>
+  <pre>world</pre>
+</body>
+</html>`
+);
+tap.equal(
+  html("hello\nworld", "html5"),
+  `<!DOCTYPE html>
+<html>
+<head>
+  <link rel=icon href="data:,">
+  <title>hello</title>
+</head>
+<body>
+  <h1>hello</h1>
+  <pre>world</pre>
+</body>
+</html>`
+);
+tap.equal(
+  html("hello\nworld", "tags"),
+  `<TITLE>hello</TITLE><H1>hello</H1>
+<PLAINTEXT>
+world`
+);
+
+tap.equal(
+  htm("hello\n[world](/)"),
+  `<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 Strict Level 1//EN">
+<html>
+<head>
+  <link rel=icon href="data:,">
+  <title>hello</title>
+</head>
+<body>
+  <h1>hello</h1>
+  <pre><a href="/">world</a></pre>
+</body>
+</html>`
+);
+tap.equal(
+  html("hello\n[world](/)", "tags"),
+  `<TITLE>hello</TITLE><H1>hello</H1>
+<PLAINTEXT>
+[world](/)`
+);
+tap.equal(
+  html("hello\nhttps://example.com", "tags"),
+  `<TITLE>hello</TITLE><H1>hello</H1>
+<PLAINTEXT>
+https://example.com`
+);
+
+tap.equal(
+  htm("hello\n2 < 3"),
+  `<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 Strict Level 1//EN">
+<html>
+<head>
+  <link rel=icon href="data:,">
+  <title>hello</title>
+</head>
+<body>
+  <h1>hello</h1>
+  <pre>2 &lt; 3</pre>
+</body>
+</html>`
+);
+tap.equal(
+  html("hello\n2 < 3", "tags"),
+  `<TITLE>hello</TITLE><H1>hello</H1>
+<PLAINTEXT>
+2 < 3`
+);

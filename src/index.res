@@ -68,6 +68,4 @@ ${body}`
 }
 
 @genType
-let htm = (text: string): string => {
-    html(text, #html2)
-}
+let htm = (text: string): string => html(text, #html2)
