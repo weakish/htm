@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from "fs";
 import { htm, html } from "../src/index.bs.js";
 
-const text: string = readFileSync("README.txt", "utf8");
+const text: string = readFileSync("README", "utf8");
 const html2: string = htm(text);
 writeFileSync("_site/index.html", html2);
 
