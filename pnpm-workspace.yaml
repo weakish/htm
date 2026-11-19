@@ -1,0 +1,4 @@
+allowBuilds:
+  gentype: true
+  reanalyze: true
+  rescript: true

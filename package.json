@@ -4,20 +4,23 @@
   "version": "0.0.0",
   "description": "Convert plain text to HTML2, autolinked.",
   "main": "src/index.bs.js",
+  "packageManager": "pnpm@12.21.0",
   "scripts": {
-    "pretest": "rescript",
-    "test": "NODE_NO_WARNINGS=1 c8 tap && mkdir -p coverage && c8 report --reporter=text-lcov > coverage/tests.lcov",
+    "pretest": "rescript && tsc -p tsconfig.test.json",
+    "test": "NODE_NO_WARNINGS=1 c8 tap dist-test/main.js && mkdir -p coverage && c8 report --reporter=text-lcov > coverage/tests.lcov",
     "lint": "reanalyze -dce && eslint test/main.ts",
-    "build": "rescript && tsc && cp src/index.gen.d.ts src/index.bs.d.ts",
+    "build": "rescript && tsc && node -e \"require('fs').copyFileSync('src/index.gen.d.ts', 'src/index.bs.d.ts')\"",
     "prepare": "husky install",
     "doc": "ts-node-esm scripts/doc.ts"
   },
   "tap": {
-    "node-arg": [
-      "--loader=ts-node/esm"
-    ],
     "coverage": false,
     "ts": false
+  },
+  "c8": {
+    "include": [
+      "src/**/*.js"
+    ]
   },
   "keywords": [
     "html2",
