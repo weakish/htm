@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "description": "Convert plain text to HTML2, autolinked.",
   "main": "src/index.bs.js",
+  "types": "src/index.bs.d.ts",
   "packageManager": "pnpm@12.21.0",
   "scripts": {
     "pretest": "rescript && tsc -p tsconfig.test.json",
