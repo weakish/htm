@@ -46,14 +46,18 @@ function doctype(variant) {
   }
 }
 
+function escapeHtml(text) {
+  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
 function html(text, variant) {
   var match = extractTitle(text);
   var body = match[1];
-  var title = match[0];
-  var tags = "<TITLE>" + title + "</TITLE><H1>" + title + "</H1>\n<PLAINTEXT>\n" + body + "";
+  var escapedTitle = escapeHtml(match[0]);
+  var tags = "<TITLE>" + escapedTitle + "</TITLE><H1>" + escapedTitle + "</H1>\n<PLAINTEXT>\n" + body + "";
   var dtd = doctype(variant);
   if (dtd !== undefined) {
-    return "" + dtd + "\n<html>\n<head>\n  <link rel=icon href=\"data:,\">\n  <title>" + title + "</title>\n</head>\n<body>\n  <h1>" + title + "</h1>\n  <pre>" + linkIt(body) + "</pre>\n</body>\n</html>";
+    return "" + dtd + "\n<html>\n<head>\n  <link rel=icon href=\"data:,\">\n  <title>" + escapedTitle + "</title>\n</head>\n<body>\n  <h1>" + escapedTitle + "</h1>\n  <pre>" + linkIt(body) + "</pre>\n</body>\n</html>";
   } else {
     return tags;
   }
@@ -68,6 +72,7 @@ export {
   extractTitle ,
   linkIt ,
   doctype ,
+  escapeHtml ,
   html ,
   htm ,
 }

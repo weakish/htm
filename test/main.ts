@@ -349,3 +349,23 @@ tap.equal(
 <PLAINTEXT>
 2 < 3`
 );
+tap.equal(
+  htm(`<script>alert(1)</script> & "x" 'y'\nbody`),
+  `<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 Strict Level 1//EN">
+<html>
+<head>
+  <link rel=icon href="data:,">
+  <title>&lt;script&gt;alert(1)&lt;/script&gt; &amp; &quot;x&quot; &#39;y&#39;</title>
+</head>
+<body>
+  <h1>&lt;script&gt;alert(1)&lt;/script&gt; &amp; &quot;x&quot; &#39;y&#39;</h1>
+  <pre>body</pre>
+</body>
+</html>`
+);
+tap.equal(
+  html('2 < 3 & "4"\n2 < 3', "tags"),
+  `<TITLE>2 &lt; 3 &amp; &quot;4&quot;</TITLE><H1>2 &lt; 3 &amp; &quot;4&quot;</H1>
+<PLAINTEXT>
+2 < 3`
+);

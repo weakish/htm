@@ -45,10 +45,21 @@ let doctype = (variant: htmlVariant): option<string> => switch variant {
 }
 
 
+let escapeHtml = (text: string): string => {
+    open Js.String2
+    text
+    ->replaceByRe(%re("/&/g"), "&amp;")
+    ->replaceByRe(%re("/</g"), "&lt;")
+    ->replaceByRe(%re("/>/g"), "&gt;")
+    ->replaceByRe(%re("/\"/g"), "&quot;")
+    ->replaceByRe(%re("/'/g"), "&#39;")
+}
+
 @genType
 let html = (text: string, variant: htmlVariant): string => {
     let (title, body) = extractTitle(text);
-    let tags = `<TITLE>${title}</TITLE><H1>${title}</H1>
+    let escapedTitle = escapeHtml(title);
+    let tags = `<TITLE>${escapedTitle}</TITLE><H1>${escapedTitle}</H1>
 <PLAINTEXT>
 ${body}`
     switch doctype(variant) {
@@ -57,10 +68,10 @@ ${body}`
 <html>
 <head>
   <link rel=icon href="data:,">
-  <title>${title}</title>
+  <title>${escapedTitle}</title>
 </head>
 <body>
-  <h1>${title}</h1>
+  <h1>${escapedTitle}</h1>
   <pre>${linkIt(body)}</pre>
 </body>
 </html>`
