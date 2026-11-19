@@ -1,3 +1,5 @@
 node_modules
 _site
 src
+pnpm-lock.yaml
+README

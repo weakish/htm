@@ -7,14 +7,13 @@
 <body>
   <h1>htm - convert plain text to HTML 2.0, auto-linked.</h1>
   <pre>
-
 Usage
 
     import htm from "htm"
     const text = "plain text"
     const html = htm(text)
 
-The returned value is a string contaning valid [HTML 2.0].
+The returned value is a string containing valid [HTML 2.0].
 The first line will be the TITLE and H1 heading.
 The remaining part will be enclosed with a PRE element,
 with links auto-linked.
@@ -32,12 +31,18 @@ ISO HTML, published as an ISO standard in 2000,
 is almost identical to HTML 4.01 Strict.
 HTML 4.01, published in 1999,
 is the most widely adopted standard in the first decade of the 21st century.
-HTML5 is the current recommendation by all mainstream web browsers.  
+HTML5 is the current recommendation by all mainstream web browsers.
 
 It also supports generating HTML tags, the HTML language before 2.0,
 which was published in 1991 and is the first publicly available description of HTML.
 Auto-link is not supported when specifying this as the output format.
 
+API
+
+See src/index.bs.d.ts
+
+APIs not listed there are considered internal.
+Changes to internal APIs are not considered as breaking changes on releases.
 
 Markdown Compatibility
 
@@ -48,7 +53,6 @@ However, the following Markdown syntax is supported:
 
 - Inline links (brackets immediately followed with parentheses) will be converted to links,
   without displaying the URL.
-
 
 Contributing
 
@@ -72,7 +76,6 @@ with tests written in TypeScript.
     "tap": "test"
   }
 
-
 License
 
 0BSD, excluding dependencies that have various licenses.
@@ -85,6 +88,7 @@ Reference
 - <a href="https://www.scss.tcd.ie/misc/15445/15445.HTML">ISO/IEC 15445:2000</a>
 - <a href="https://validator.w3.org">HTML Validator</a>
 
-[HTML 2.0]: <a href="https://www.w3.org/MarkUp/html-spec/html-spec_toc.html">https://www.w3.org/MarkUp/html-spec/html-spec_toc.html</a></pre>
+[HTML 2.0]: <a href="https://www.w3.org/MarkUp/html-spec/html-spec_toc.html">https://www.w3.org/MarkUp/html-spec/html-spec_toc.html</a>
+</pre>
 </body>
 </html>

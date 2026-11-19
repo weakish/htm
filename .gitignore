@@ -1,5 +1,6 @@
 node_modules
 lib/
 dist-test/
+dist-doc/
 coverage/tmp/
 .nyc_output/

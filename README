@@ -6,7 +6,7 @@ Usage
     const text = "plain text"
     const html = htm(text)
 
-The returned value is a string contaning valid [HTML 2.0].
+The returned value is a string containing valid [HTML 2.0].
 The first line will be the TITLE and H1 heading.
 The remaining part will be enclosed with a PRE element,
 with links auto-linked.
@@ -56,18 +56,18 @@ https://github.com/weakish/htm
 This project is written in ReScript (src/index.res),
 with tests written in TypeScript.
 
-"dependencies": {
-"linkify-string": "auto link URLs and escape <,>,&"
-},
-"devDependencies": {
-"c8": "coverage",
-"gentype": "generate TypeScript type definitions from ReScript",
-"husky": "manage git pre commits",
-"prettier": "code format",
-"pretty-quick": "code format pre-commit",
-"reanalyze": "analyze ReScript code for common problems",
-"tap": "test"
-}
+  "dependencies": {
+    "linkify-string": "auto link URLs and escape <,>,&"
+  },
+  "devDependencies": {
+    "c8": "coverage",
+    "gentype": "generate TypeScript type definitions from ReScript",
+    "husky": "manage git pre commits",
+    "prettier": "code format",
+    "pretty-quick": "code format pre-commit",
+    "reanalyze": "analyze ReScript code for common problems",
+    "tap": "test"
+  }
 
 License
 
@@ -76,9 +76,9 @@ License
 Reference
 
 - [HTML Tags](http://info.cern.ch/hypertext/WWW/MarkUp/Tags.html)
-- [Hypertext Markup Language - 2.0][html 2.0]
+- [Hypertext Markup Language - 2.0][HTML 2.0]
 - [RFC1866](https://datatracker.ietf.org/doc/html/rfc1866)
 - [ISO/IEC 15445:2000](https://www.scss.tcd.ie/misc/15445/15445.HTML)
 - [HTML Validator](https://validator.w3.org)
 
-[html 2.0]: https://www.w3.org/MarkUp/html-spec/html-spec_toc.html
+[HTML 2.0]: https://www.w3.org/MarkUp/html-spec/html-spec_toc.html

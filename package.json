@@ -12,7 +12,7 @@
     "lint": "reanalyze -dce && eslint test/main.ts",
     "build": "rescript && tsc && node -e \"require('fs').copyFileSync('src/index.gen.d.ts', 'src/index.bs.d.ts')\"",
     "prepare": "husky install",
-    "doc": "ts-node-esm scripts/doc.ts"
+    "doc": "tsc -p tsconfig.doc.json && node dist-doc/doc.js"
   },
   "tap": {
     "coverage": false,
@@ -58,7 +58,6 @@
     "reanalyze": "^2.23.0",
     "rescript": "^10.0.1",
     "tap": "^16.3.0",
-    "ts-node": "^10.9.1",
     "typescript": "^4.8.2"
   }
 }
