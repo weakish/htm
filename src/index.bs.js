@@ -27,11 +27,79 @@ function extractTitle(text) {
         ];
 }
 
+function escapeHtml(text) {
+  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
+function unescapeLinkifyText(text) {
+  return text.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, "\"").replace(/&amp;/g, "&");
+}
+
+function isSafeUrl(rawUrl) {
+  var url = rawUrl.trim();
+  if (url === "" || url.includes("\"") || url.includes("'")) {
+    return false;
+  }
+  var normalized = url.replace(/[\x00-\x20]+/g, "").split("\\").join("/").toLowerCase();
+  return !(normalized.startsWith("//") || normalized.startsWith("javascript:") || normalized.startsWith("vbscript:") || normalized.startsWith("data:"));
+}
+
 function linkIt(text) {
-  var local = /\[([^\]]+)\]\(([^<)]+)\)/gm;
-  var inline = /\[([^\]]+)\]\(<a href=\"([^\"]+)\">[^<]+<\/a>\)/gm;
-  var replacement = "<a href=\"$2\">$1</a>";
-  return LinkifyString(text).replace(local, replacement).replace(inline, replacement);
+  var local = /\[([^\]]+)\]\(((?:[^()<]|\([^()<]*\))+)\)/gm;
+  var inline = /\[([^\]]+)\]\(((?:[^)<[\n]|\)(?!\s))*)<a href=\"([^\"]+)\">([^<]*)<\/a>([^)]*)\)/gm;
+  var isSchemePrefix = function (prefix) {
+    var lead = prefix.replace(/^\s+/, "");
+    if (lead !== lead.trim()) {
+      return false;
+    }
+    var parts = lead.split(":");
+    if (parts.length !== 2) {
+      return false;
+    }
+    var name = parts[0];
+    var rest = parts[1];
+    if (/^[a-zA-Z][a-zA-Z0-9+.-]*$/.test(name)) {
+      return rest.split("/").every(function (part) {
+                  return part === "";
+                });
+    } else {
+      return false;
+    }
+  };
+  var escapeBareAmpInHrefs = function (html) {
+    return html.replace(/<a href=\"([^\"]*)\">/g, (function (_whole, href) {
+                  var fixed = href.replace(/&(?!quot;)/g, "&amp;");
+                  return "<a href=\"" + fixed + "\">";
+                }));
+  };
+  var unescapeLinkifyHref = function (href) {
+    return href.replace(/&quot;/g, "\"").replace(/&amp;/g, "&");
+  };
+  var toAnchor = function (whole, label, url) {
+    var logical = unescapeLinkifyText(url);
+    if (isSafeUrl(logical)) {
+      return "<a href=\"" + escapeHtml(logical.trim()) + "\">" + label + "</a>";
+    } else {
+      return whole;
+    }
+  };
+  var toInlineAnchor = function (whole, label, prefix, href, inner, suffix) {
+    var logicalPrefix = unescapeLinkifyText(prefix);
+    var logicalUrl = logicalPrefix.trim() === "" ? unescapeLinkifyHref(href) : logicalPrefix + unescapeLinkifyText(inner) + unescapeLinkifyText(suffix);
+    var plain = "[" + label + "](" + prefix + "" + inner + "" + suffix + ")";
+    if (isSafeUrl(logicalUrl)) {
+      if (logicalPrefix.trim() === "" && suffix.trim() === "") {
+        return "<a href=\"" + escapeHtml(logicalUrl.trim()) + "\">" + label + "</a>";
+      } else if (isSchemePrefix(logicalPrefix)) {
+        return "<a href=\"" + escapeHtml(logicalUrl.trim()) + "\">" + label + "</a>";
+      } else {
+        return whole;
+      }
+    } else {
+      return plain;
+    }
+  };
+  return escapeBareAmpInHrefs(LinkifyString(text)).replace(inline, toInlineAnchor).replace(local, toAnchor);
 }
 
 function doctype(variant) {
@@ -44,10 +112,6 @@ function doctype(variant) {
   } else {
     return ;
   }
-}
-
-function escapeHtml(text) {
-  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;").replace(/'/g, "&#39;");
 }
 
 function html(text, variant) {
@@ -70,9 +134,11 @@ function htm(text) {
 export {
   h1 ,
   extractTitle ,
+  escapeHtml ,
+  unescapeLinkifyText ,
+  isSafeUrl ,
   linkIt ,
   doctype ,
-  escapeHtml ,
   html ,
   htm ,
 }

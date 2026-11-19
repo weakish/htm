@@ -232,6 +232,144 @@ const links: LinkSample[] = [
   inline_relative_link,
   inline_link,
   readme_with_links,
+  {
+    sample: "[mail](mailto:user@example.com)",
+    expected: '<a href="mailto:user@example.com">mail</a>',
+  },
+  {
+    sample: "[mail](user@example.com)",
+    expected: '<a href="mailto:user@example.com">mail</a>',
+  },
+  {
+    sample: "[ftp](ftp://example.com/file)",
+    expected: '<a href="ftp://example.com/file">ftp</a>',
+  },
+  {
+    sample: "[irc](irc://irc.example.com/channel)",
+    expected: '<a href="irc://irc.example.com/channel">irc</a>',
+  },
+  {
+    sample: "[irc](irc://irc.example.com/channel  )",
+    expected: '<a href="irc://irc.example.com/channel">irc</a>',
+  },
+  {
+    sample: "[irc](irc://irc.example.com/channel?key=a&b=1)",
+    expected: '<a href="irc://irc.example.com/channel?key=a&amp;b=1">irc</a>',
+  },
+  {
+    sample: "[x](see https://example.com/a)",
+    expected:
+      '[x](see <a href="https://example.com/a">https://example.com/a</a>)',
+  },
+  {
+    sample: "[x](Note: https://example.com/a)",
+    expected:
+      '[x](Note: <a href="https://example.com/a">https://example.com/a</a>)',
+  },
+  {
+    sample: "[x](mailto: user@example.com)",
+    expected:
+      '[x](mailto: <a href="mailto:user@example.com">user@example.com</a>)',
+  },
+  {
+    sample: "[irc](  irc://irc.example.com/channel)",
+    expected: '<a href="irc://irc.example.com/channel">irc</a>',
+  },
+  {
+    sample: "https://example.com/?a=1&copy=2",
+    expected:
+      '<a href="https://example.com/?a=1&amp;copy=2">https://example.com/?a=1&amp;copy=2</a>',
+  },
+  {
+    sample: "[x](see https://example.com/?a=1&copy=2)",
+    expected:
+      '[x](see <a href="https://example.com/?a=1&amp;copy=2">https://example.com/?a=1&amp;copy=2</a>)',
+  },
+  {
+    sample: "[xss](javascript://example.com/%0aalert(1))",
+    expected: "[xss](javascript://example.com/%0aalert(1))",
+  },
+  {
+    sample: "[xss](javascript:alert(1)//example.com/%0aalert(2))",
+    expected: "[xss](javascript:alert(1)//example.com/%0aalert(2))",
+  },
+  {
+    sample: "[xss](javascript:alert(1))",
+    expected: "[xss](javascript:alert(1))",
+  },
+  {
+    sample: "[xss](JAVASCRIPT:alert(1))",
+    expected: "[xss](JAVASCRIPT:alert(1))",
+  },
+  {
+    sample: "[xss](java\tscript:alert(1))",
+    expected: "[xss](java\tscript:alert(1))",
+  },
+  {
+    sample: "[xss](vbscript:msgbox(1))",
+    expected: "[xss](vbscript:msgbox(1))",
+  },
+  {
+    sample: "[data](data:text/html,hi)",
+    expected: "[data](data:text/html,hi)",
+  },
+  {
+    sample: '[break](test" onclick="alert(1))',
+    expected: '[break](test" onclick="alert(1))',
+  },
+  {
+    sample: "[empty](   )",
+    expected: "[empty](   )",
+  },
+  {
+    sample: "[scheme-relative](//127.0.0.1/)",
+    expected: "[scheme-relative](//127.0.0.1/)",
+  },
+  {
+    sample: "[scheme-relative](\\\\127.0.0.1\\\\x)",
+    expected: "[scheme-relative](\\\\127.0.0.1\\\\x)",
+  },
+  {
+    sample: "[scheme-relative](/\\\\127.0.0.1/x)",
+    expected: "[scheme-relative](/\\\\127.0.0.1/x)",
+  },
+  {
+    sample: "[scheme-relative](/\t/127.0.0.1/)",
+    expected: "[scheme-relative](/\t/127.0.0.1/)",
+  },
+  {
+    sample: "[path](foo\\bar)",
+    expected: '<a href="foo\\bar">path</a>',
+  },
+  {
+    sample: "[path](foo?a=1&b=2)",
+    expected: '<a href="foo?a=1&amp;b=2">path</a>',
+  },
+  {
+    sample: "[docs](/wiki/Foo_(bar))",
+    expected: '<a href="/wiki/Foo_(bar)">docs</a>',
+  },
+  {
+    sample: "[path](/a(b)/c)",
+    expected: '<a href="/a(b)/c">path</a>',
+  },
+  {
+    sample: '[x](/foo(bar)"onclick=alert(1))',
+    expected: '[x](/foo(bar)"onclick=alert(1))',
+  },
+  {
+    sample: "[q](https://example.com/a?b=1&copy;2)",
+    expected: '<a href="https://example.com/a?b=1&amp;copy;2">q</a>',
+  },
+  {
+    sample: "[scheme-relative](\\\\evil.com\\\\x)",
+    expected: "[scheme-relative](\\\\evil.com\\\\x)",
+  },
+  {
+    sample: "See [foo](/foo), [bar](https://example.com/bar).",
+    expected:
+      'See <a href="/foo">foo</a>, <a href="https://example.com/bar">bar</a>.',
+  },
 ];
 links.forEach((link) => {
   tap.equal(linkIt(link.sample), link.expected);

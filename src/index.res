@@ -24,15 +24,137 @@ let extractTitle = (text: string): (string, string) => {
     }
 }
 
+@send external replaceLink: (string, Js.Re.t, (string, string, string) => string) => string = "replace"
+@send external replaceInlineLink: (
+    string,
+    Js.Re.t,
+    (string, string, string, string, string, string) => string,
+) => string = "replace"
+@send external replaceHrefAmp: (string, Js.Re.t, (string, string) => string) => string = "replace"
+
+let escapeHtml = (text: string): string => {
+    open Js.String2
+    text
+    ->replaceByRe(%re("/&/g"), "&amp;")
+    ->replaceByRe(%re("/</g"), "&lt;")
+    ->replaceByRe(%re("/>/g"), "&gt;")
+    ->replaceByRe(%re("/\"/g"), "&quot;")
+    ->replaceByRe(%re("/'/g"), "&#39;")
+}
+
+// linkifyStr escapes text nodes (`&`, `<`, `>`) but its href only escapes `"`.
+let unescapeLinkifyText = (text: string): string => {
+    open Js.String2
+    text
+    ->replaceByRe(%re("/&lt;/g"), "<")
+    ->replaceByRe(%re("/&gt;/g"), ">")
+    ->replaceByRe(%re("/&quot;/g"), "\"")
+    ->replaceByRe(%re("/&amp;/g"), "&")
+}
+
+let isSafeUrl = (rawUrl: string): bool => {
+    open Js.String2
+    let url = rawUrl->trim
+    if url == "" || url->includes("\"") || url->includes("'") {
+        false
+    } else {
+        // WHATWG parsers drop C0 controls and treat "\" as "/". "\\host" and
+        // "/\\host" are then scheme-relative ("//host"), not path-relative.
+        let normalized =
+            url
+            ->replaceByRe(%re("/[\x00-\x20]+/g"), "")
+            ->split("\\")
+            ->Js.Array2.joinWith("/")
+            ->toLowerCase
+        !(
+            normalized->startsWith("//") ||
+            normalized->startsWith("javascript:") ||
+            normalized->startsWith("vbscript:") ||
+            normalized->startsWith("data:")
+        )
+    }
+}
+
 @genType
 let linkIt = (text: string): string => {
-    // [description](/path) is not handled by linkifyStr
-    let local = %re("/\[([^\]]+)\]\(([^<)]+)\)/gm")
-    // [description](url), where url is auto-linked by linkifyStr
-    let inline = %re("/\[([^\]]+)\]\(<a href=\"([^\"]+)\">[^<]+<\/a>\)/gm")
-    let replacement = "<a href=\"$2\">$1</a>"
-    let replace = Js.String2.replaceByRe
-    text->linkifyStr->replace(local, replacement)->replace(inline, replacement)
+    // [description](/path) is not handled by linkifyStr.
+    // One level of parentheses stays in the destination (`/wiki/Foo_(bar)`).
+    let local = %re("/\[([^\]]+)\]\(((?:[^()<]|\([^()<]*\))+)\)/gm")
+    // linkifyStr may wrap only the host. `)` is allowed in the destination
+    // (`alert(1)//host`) unless whitespace follows it, and `[` / `\n` are
+    // excluded so `[label](/path), [next](https://...)` is not swallowed.
+    // Suffix is text left after </a> (`\\host\\x`, trailing spaces).
+    let inline = %re("/\[([^\]]+)\]\(((?:[^)<[\n]|\)(?!\s))*)<a href=\"([^\"]+)\">([^<]*)<\/a>([^)]*)\)/gm")
+    // A scheme (`irc://`, `javascript:`) is part of the destination.
+    // Prose before the anchor (`see https://...`, `Note: https://...`) is not.
+    let isSlashes = (s: string): bool =>
+        s->Js.String2.split("/")->Js.Array2.every(part => part == "")
+    let isSchemePrefix = (prefix: string): bool => {
+        open Js.String2
+        // Drop leading whitespace only. Trailing whitespace is prose
+        // (`Note: https://...`), not a scheme plus slashes.
+        let lead = prefix->replaceByRe(%re("/^\s+/"), "")
+        if lead != lead->trim {
+            false
+        } else {
+            let parts = lead->split(":")
+            if Js.Array2.length(parts) != 2 {
+                false
+            } else {
+                let name = parts->Js.Array2.unsafe_get(0)
+                let rest = parts->Js.Array2.unsafe_get(1)
+                Js.Re.test_(%re("/^[a-zA-Z][a-zA-Z0-9+.-]*$/"), name) && isSlashes(rest)
+            }
+        }
+    }
+    // linkifyStr's href escapes `"` as `&quot;` and leaves `&` raw, so a query
+    // like `&copy` is a named character in HTML. Escape those `&` first.
+    let escapeBareAmpInHrefs = (html: string): string =>
+        html->replaceHrefAmp(%re("/<a href=\"([^\"]*)\">/g"), (_whole, href) => {
+            let fixed = href->Js.String2.replaceByRe(%re("/&(?!quot;)/g"), "&amp;")
+            `<a href="${fixed}">`
+        })
+    let unescapeLinkifyHref = (href: string): string =>
+        href
+        ->Js.String2.replaceByRe(%re("/&quot;/g"), "\"")
+        ->Js.String2.replaceByRe(%re("/&amp;/g"), "&")
+    let toAnchor = (whole, label, url) => {
+        // linkifyStr escapes `&` in text that it does not itself link.
+        let logical = unescapeLinkifyText(url)
+        if isSafeUrl(logical) {
+            `<a href="${escapeHtml(logical->Js.String2.trim)}">${label}</a>`
+        } else {
+            whole
+        }
+    }
+    let toInlineAnchor = (whole, label, prefix, href, inner, suffix) => {
+        open Js.String2
+        let logicalPrefix = unescapeLinkifyText(prefix)
+        let logicalUrl = if logicalPrefix->trim == "" {
+            unescapeLinkifyHref(href)
+        } else {
+            logicalPrefix ++
+            unescapeLinkifyText(inner) ++
+            unescapeLinkifyText(suffix)
+        }
+        let plain = `[${label}](${prefix}${inner}${suffix})`
+        if !isSafeUrl(logicalUrl) {
+            plain
+        } else if logicalPrefix->trim == "" && suffix->trim == "" {
+            `<a href="${escapeHtml(logicalUrl->trim)}">${label}</a>`
+        } else if isSchemePrefix(logicalPrefix) {
+            `<a href="${escapeHtml(logicalUrl->trim)}">${label}</a>`
+        } else {
+            whole
+        }
+    }
+    // Inline before local. local's `)` would split `javascript:alert(1)//host`
+    // and leave linkify's anchor in the output.
+    text
+    ->linkifyStr
+    ->escapeBareAmpInHrefs
+    ->replaceInlineLink(inline, toInlineAnchor)
+    ->replaceLink(local, toAnchor)
 }
 
 
@@ -44,16 +166,6 @@ let doctype = (variant: htmlVariant): option<string> => switch variant {
     | #html5 => Some("<!DOCTYPE html>")
 }
 
-
-let escapeHtml = (text: string): string => {
-    open Js.String2
-    text
-    ->replaceByRe(%re("/&/g"), "&amp;")
-    ->replaceByRe(%re("/</g"), "&lt;")
-    ->replaceByRe(%re("/>/g"), "&gt;")
-    ->replaceByRe(%re("/\"/g"), "&quot;")
-    ->replaceByRe(%re("/'/g"), "&#39;")
-}
 
 @genType
 let html = (text: string, variant: htmlVariant): string => {
