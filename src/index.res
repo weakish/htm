@@ -177,6 +177,9 @@ let html = (text: string, variant: htmlVariant): string => {
 ${body}`
     switch doctype(variant) {
         | None => tags
+        // `rel=icon` is unquoted to save 2 bytes (`href="data:,"` must stay
+        // quoted because `:` and `,` are invalid in unquoted HTML 2.0 values);
+        // old HTML 2.0 browsers ignore `rel=icon` / `data:` as a no-op.
         | Some(dtd) => `${dtd}
 <html>
 <head>
