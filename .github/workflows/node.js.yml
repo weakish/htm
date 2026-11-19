@@ -22,8 +22,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "16.x"
+      - run: pnpm install --frozen-lockfile
       - run: pnpm test
   codacy-coverage-reporter:
+    needs: test
     runs-on: ubuntu-latest
     name: codacy-coverage-reporter
     steps:

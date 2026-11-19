@@ -1,7 +1,9 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+set -e
 pnpm build
 pnpm lint
 npx pretty-quick --staged
 pnpm test
+git add coverage/tests.lcov
