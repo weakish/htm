@@ -178,9 +178,6 @@ importers:
       linkify-string:
         specifier: ^3.0.4
         version: 3.0.4(linkifyjs@3.0.5)
-      linkifyjs:
-        specifier: ^3.0.5
-        version: 3.0.5
     devDependencies:
       '@tsconfig/node16-strictest-esm':
         specifier: ^1.0.3
