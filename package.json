@@ -11,7 +11,7 @@
     "test": "NODE_NO_WARNINGS=1 c8 tap dist-test/main.js && mkdir -p coverage && c8 report --reporter=text-lcov > coverage/tests.lcov",
     "lint": "reanalyze -dce && eslint test/main.ts",
     "build": "rescript && tsc && node -e \"require('fs').copyFileSync('src/index.gen.d.ts', 'src/index.bs.d.ts')\"",
-    "prepare": "husky install",
+    "prepare": "husky || true",
     "doc": "tsc -p tsconfig.doc.json && node dist-doc/doc.js"
   },
   "tap": {
@@ -51,7 +51,7 @@
     "c8": "^7.12.0",
     "eslint": "^8.23.0",
     "gentype": "^4.5.0",
-    "husky": "^8.0.0",
+    "husky": "^9.1.7",
     "prettier": "^2.7.1",
     "pretty-quick": "^3.1.3",
     "reanalyze": "^2.23.0",
