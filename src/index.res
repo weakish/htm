@@ -79,12 +79,12 @@ let isSafeUrl = (rawUrl: string): bool => {
 let linkIt = (text: string): string => {
     // [description](/path) is not handled by linkifyStr.
     // One level of parentheses stays in the destination (`/wiki/Foo_(bar)`).
-    let local = %re("/\[([^\]]+)\]\(((?:[^()<]|\([^()<]*\))+)\)/gm")
+    let local = %re("/!?\[([^\]]+)\]\(((?:[^()<]|\([^()<]*\))+)\)/gm")
     // linkifyStr may wrap only the host. `)` is allowed in the destination
     // (`alert(1)//host`) unless whitespace follows it, and `[` / `\n` are
     // excluded so `[label](/path), [next](https://...)` is not swallowed.
     // Suffix is text left after </a> (`\\host\\x`, trailing spaces).
-    let inline = %re("/\[([^\]]+)\]\(((?:[^)<[\n]|\)(?!\s))*)<a href=\"([^\"]+)\">([^<]*)<\/a>([^)]*)\)/gm")
+    let inline = %re("/!?\[([^\]]+)\]\(((?:[^)<[\n]|\)(?!\s))*)<a href=\"([^\"]+)\">([^<]*)<\/a>([^)]*)\)/gm")
     // A scheme (`irc://`, `javascript:`) is part of the destination.
     // Prose before the anchor (`see https://...`, `Note: https://...`) is not.
     let isSlashes = (s: string): bool =>
@@ -137,7 +137,8 @@ let linkIt = (text: string): string => {
             unescapeLinkifyText(inner) ++
             unescapeLinkifyText(suffix)
         }
-        let plain = `[${label}](${prefix}${inner}${suffix})`
+        let bang = whole->startsWith("!") ? "!" : ""
+        let plain = `${bang}[${label}](${prefix}${inner}${suffix})`
         if !isSafeUrl(logicalUrl) {
             plain
         } else if logicalPrefix->trim == "" && suffix->trim == "" {

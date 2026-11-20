@@ -370,6 +370,30 @@ const links: LinkSample[] = [
     expected:
       'See <a href="/foo">foo</a>, <a href="https://example.com/bar">bar</a>.',
   },
+  {
+    sample: "![logo](https://example.com/a.png)",
+    expected: '<a href="https://example.com/a.png">logo</a>',
+  },
+  {
+    sample: "![logo](/logo.png)",
+    expected: '<a href="/logo.png">logo</a>',
+  },
+  {
+    sample: "![x](/a(b).png)",
+    expected: '<a href="/a(b).png">x</a>',
+  },
+  {
+    sample: "![xss](javascript:alert(1))",
+    expected: "![xss](javascript:alert(1))",
+  },
+  {
+    sample: "![xss](javascript://example.com/%0aalert(1))",
+    expected: "![xss](javascript://example.com/%0aalert(1))",
+  },
+  {
+    sample: "![xss](javascript:alert(1)//example.com/%0aalert(2))",
+    expected: "![xss](javascript:alert(1)//example.com/%0aalert(2))",
+  },
 ];
 links.forEach((link) => {
   tap.equal(linkIt(link.sample), link.expected);

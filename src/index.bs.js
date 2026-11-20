@@ -45,8 +45,8 @@ function isSafeUrl(rawUrl) {
 }
 
 function linkIt(text) {
-  var local = /\[([^\]]+)\]\(((?:[^()<]|\([^()<]*\))+)\)/gm;
-  var inline = /\[([^\]]+)\]\(((?:[^)<[\n]|\)(?!\s))*)<a href=\"([^\"]+)\">([^<]*)<\/a>([^)]*)\)/gm;
+  var local = /!?\[([^\]]+)\]\(((?:[^()<]|\([^()<]*\))+)\)/gm;
+  var inline = /!?\[([^\]]+)\]\(((?:[^)<[\n]|\)(?!\s))*)<a href=\"([^\"]+)\">([^<]*)<\/a>([^)]*)\)/gm;
   var isSchemePrefix = function (prefix) {
     var lead = prefix.replace(/^\s+/, "");
     if (lead !== lead.trim()) {
@@ -86,7 +86,8 @@ function linkIt(text) {
   var toInlineAnchor = function (whole, label, prefix, href, inner, suffix) {
     var logicalPrefix = unescapeLinkifyText(prefix);
     var logicalUrl = logicalPrefix.trim() === "" ? unescapeLinkifyHref(href) : logicalPrefix + unescapeLinkifyText(inner) + unescapeLinkifyText(suffix);
-    var plain = "[" + label + "](" + prefix + "" + inner + "" + suffix + ")";
+    var bang = whole.startsWith("!") ? "!" : "";
+    var plain = "" + bang + "[" + label + "](" + prefix + "" + inner + "" + suffix + ")";
     if (isSafeUrl(logicalUrl)) {
       if (logicalPrefix.trim() === "" && suffix.trim() === "") {
         return "<a href=\"" + escapeHtml(logicalUrl.trim()) + "\">" + label + "</a>";
