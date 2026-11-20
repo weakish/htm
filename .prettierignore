@@ -2,4 +2,6 @@ node_modules
 _site
 src
 pnpm-lock.yaml
+# Prettier infers an extensionless README as Markdown and mangles the
+# plain-text formatting (see https://github.com/prettier/prettier/issues/20565)
 README
